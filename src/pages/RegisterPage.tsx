@@ -13,7 +13,8 @@ import {
   ShieldAlert, 
   Sparkles, 
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  XCircle
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { StarfieldBackground } from '../components/StarfieldBackground';
@@ -38,6 +39,7 @@ export const RegisterPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
 
@@ -53,6 +55,20 @@ export const RegisterPage: React.FC = () => {
   };
 
   const strength = getPasswordStrength();
+  const passcodesMatch = password.length > 0 && confirmPassword.length > 0 && password === confirmPassword;
+  const passcodesMismatch = confirmPassword.length > 0 && password !== confirmPassword;
+
+  const handlePasswordChange = (val: string) => {
+    setPassword(val);
+    if (localError) setLocalError(null);
+    if (authError) clearAuthError();
+  };
+
+  const handleConfirmPasswordChange = (val: string) => {
+    setConfirmPassword(val);
+    if (localError) setLocalError(null);
+    if (authError) clearAuthError();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,7 +86,7 @@ export const RegisterPage: React.FC = () => {
     }
 
     if (password.length < 6) {
-      setLocalError('Password must be at least 6 characters in length.');
+      setLocalError('Passcode must be at least 6 characters in length.');
       return;
     }
 
@@ -179,7 +195,7 @@ export const RegisterPage: React.FC = () => {
               </motion.div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs font-mono">
+            <form onSubmit={handleSubmit} className="space-y-4 text-xs font-mono" autoComplete="on">
               
               {/* Full Name */}
               <div className="space-y-1.5">
@@ -190,6 +206,8 @@ export const RegisterPage: React.FC = () => {
                   <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
+                    name="name"
+                    autoComplete="name"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -208,6 +226,8 @@ export const RegisterPage: React.FC = () => {
                   <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="email"
+                    name="email"
+                    autoComplete="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -226,16 +246,19 @@ export const RegisterPage: React.FC = () => {
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    autoComplete="new-password"
                     required
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => handlePasswordChange(e.target.value)}
                     placeholder="••••••••••••"
                     className="w-full pl-10 pr-10 py-3 bg-space-900/90 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/40 transition-all font-sans"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 cursor-pointer"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 cursor-pointer p-1"
+                    title={showPassword ? 'Hide passcode' : 'Show passcode'}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -264,19 +287,47 @@ export const RegisterPage: React.FC = () => {
 
               {/* Confirm Password */}
               <div className="space-y-1.5">
-                <label className="block text-slate-300 font-medium">
-                  Confirm Passcode
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="block text-slate-300 font-medium">
+                    Confirm Passcode
+                  </label>
+                  {passcodesMatch && (
+                    <span className="text-[11px] text-emerald-400 flex items-center gap-1 font-mono">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Passcodes match
+                    </span>
+                  )}
+                  {passcodesMismatch && (
+                    <span className="text-[11px] text-amber-400 flex items-center gap-1 font-mono">
+                      <AlertCircle className="w-3.5 h-3.5" /> Does not match
+                    </span>
+                  )}
+                </div>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
-                    type={showPassword ? 'text' : 'password'}
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    name="confirmPassword"
+                    autoComplete="new-password"
                     required
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onChange={(e) => handleConfirmPasswordChange(e.target.value)}
                     placeholder="••••••••••••"
-                    className="w-full pl-10 pr-4 py-3 bg-space-900/90 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/40 transition-all font-sans"
+                    className={`w-full pl-10 pr-10 py-3 bg-space-900/90 border rounded-xl text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none transition-all font-sans ${
+                      passcodesMatch
+                        ? 'border-emerald-500/80 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/40'
+                        : passcodesMismatch
+                        ? 'border-amber-500/80 focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40'
+                        : 'border-slate-700/80 focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/40'
+                    }`}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 cursor-pointer p-1"
+                    title={showConfirmPassword ? 'Hide passcode' : 'Show passcode'}
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
 
@@ -321,3 +372,5 @@ export const RegisterPage: React.FC = () => {
     </div>
   );
 };
+
+export default RegisterPage;
