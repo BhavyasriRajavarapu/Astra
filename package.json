@@ -1,0 +1,53 @@
+{
+  "name": "astra",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "ASTRA - Real-Time Asteroid Tracker & Risk Predictor",
+  "scripts": {
+    "dev": "node ./node_modules/concurrently/dist/bin/concurrently.js -n \"CLIENT,SERVER\" -c \"cyan,magenta\" \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "node ./node_modules/vite/bin/vite.js",
+    "dev:server": "node ./node_modules/tsx/dist/cli.mjs watch server/server.ts",
+    "build": "node ./node_modules/vite/bin/vite.js build",
+    "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit",
+    "start": "node ./node_modules/tsx/dist/cli.mjs server/server.ts",
+    "preview": "node ./node_modules/vite/bin/vite.js preview"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "bcryptjs": "^3.0.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "framer-motion": "^12.4.7",
+    "gsap": "^3.15.0",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^0.475.0",
+    "mongoose": "^8.10.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.18.4",
+    "recharts": "^2.15.1",
+    "tailwind-merge": "^3.0.1",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.13.4",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
+    "postcss": "^8.5.2",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0"
+  }
+}
