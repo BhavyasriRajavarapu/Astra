@@ -248,6 +248,9 @@ export const RegisterPage: React.FC = () => {
                     type={showPassword ? 'text' : 'password'}
                     name="password"
                     autoComplete="new-password"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
                     required
                     value={password}
                     onChange={(e) => handlePasswordChange(e.target.value)}
@@ -308,6 +311,9 @@ export const RegisterPage: React.FC = () => {
                     type={showConfirmPassword ? 'text' : 'password'}
                     name="confirmPassword"
                     autoComplete="new-password"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
                     required
                     value={confirmPassword}
                     onChange={(e) => handleConfirmPasswordChange(e.target.value)}

@@ -1,9 +1,14 @@
 import axios from 'axios';
 import { IAsteroid, IDashboardStats, IWatchlistItem, IUserPreferences } from '../types/asteroid';
 
+const envApiUrl = (import.meta as any).env?.VITE_API_URL;
+const apiBase = envApiUrl
+  ? `${envApiUrl.replace(/\/$/, '')}/api`
+  : '/api';
+
 const api = axios.create({
-  baseURL: '/api',
-  timeout: 10000,
+  baseURL: apiBase,
+  timeout: 15000,
 });
 
 // Attach JWT token to requests automatically
